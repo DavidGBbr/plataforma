@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../admin/jwt-auth.guard';
 import { TurmasService } from './turmas.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('turmas')
 export class TurmasController {
     constructor(private readonly service: TurmasService) { }

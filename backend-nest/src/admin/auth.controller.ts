@@ -1,10 +1,15 @@
 import { Controller, Post, Body, Get, UseGuards, Request, Patch, Put, Delete, Query, Param } from '@nestjs/common';
 import { AdminService } from './admin.service';
+import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from './jwt-auth.guard';
 import * as bcrypt from 'bcryptjs';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly adminService: AdminService) { }
+    constructor(
+        private readonly adminService: AdminService,
+        private readonly jwtService: JwtService
+    ) { }
 
     @Post('login')
     async login(@Body() body: any) {
@@ -15,8 +20,10 @@ export class AuthController {
             if (!user.isApproved && user.role !== 'admin') {
                 return { message: 'Aguardando aprovação do administrador.' };
             }
+            const payload = { sub: user.id, email: user.email, role: user.role };
+            const token = await this.jwtService.signAsync(payload);
             return {
-                token: 'real_token_' + user.id,
+                token,
                 user: {
                     id: user.id,
                     name: user.name,
@@ -46,17 +53,20 @@ export class AuthController {
         };
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('pending')
     async getPendingUsers() {
         const all = await this.adminService.findAll();
         return all.filter((u: any) => !u.isApproved);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('approve/:id')
     async approveUser(@Param('id') id: string) {
         return this.adminService.update(id, { isApproved: true, role: 'admin' });
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('profile')
     async getProfile(@Request() req: any) {
         // Mocking for now - ideally get current user from JWT
@@ -73,6 +83,7 @@ export class AuthController {
         return { message: 'User not found' };
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put('profile')
     async updateProfile(@Body() userData: any) {
         let user: any;
@@ -94,11 +105,13 @@ export class AuthController {
         return { message: 'User not found' };
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('profile')
     async patchProfile(@Body() userData: any) {
         return this.updateProfile(userData);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put('password')
     async updatePassword(@Body() body: any) {
         const { email, currentPassword, newPassword } = body;
@@ -117,6 +130,7 @@ export class AuthController {
         return { message: 'Senha alterada com sucesso!' };
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete('account')
     async deleteAccount(@Query('email') email: string) {
         const user: any = await this.adminService.findByEmail(email);

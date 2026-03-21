@@ -20,7 +20,7 @@ import { AdminModule } from './admin/admin.module';
                     type: 'postgres',
                     url: url,
                     autoLoadEntities: true,
-                    synchronize: true, // Apenas para desenvolvimento
+                    synchronize: false, // Migrations s&#227;o usadas no lugar de synchronize
                     ssl: url?.includes('supabase') || url?.includes('neon') || url?.includes('require')
                         ? { rejectUnauthorized: false }
                         : false,

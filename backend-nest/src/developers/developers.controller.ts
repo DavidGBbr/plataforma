@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../admin/jwt-auth.guard';
 import { DevelopersService } from './developers.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('developers')
 export class DevelopersController {
     constructor(private readonly service: DevelopersService) { }

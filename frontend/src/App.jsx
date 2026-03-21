@@ -12,12 +12,11 @@ import { DataProvider } from './context/DataContext';
 function App() {
   return (
     <AuthProvider>
-      <DataProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
 
-          <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route element={<ProtectedRoute><DataProvider><MainLayout /></DataProvider></ProtectedRoute>}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/turmas" element={<Turma />} />
             <Route path="/configuracoes" element={<Config />} />
@@ -25,7 +24,6 @@ function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </DataProvider>
     </AuthProvider>
   );
 }

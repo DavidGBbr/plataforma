@@ -24,6 +24,10 @@ import { AdminModule } from "./admin/admin.module";
             __dirname.replace(/\\/g, "/") + "/migrations/*{.ts,.js}",
           ],
           synchronize: false, // Migrations s&#227;o usadas no lugar de synchronize
+          extra: {
+            connectionTimeoutMillis: 5000,
+            idleTimeoutMillis: 10000,
+          },
           ssl:
             url?.includes("supabase") ||
             url?.includes("neon") ||

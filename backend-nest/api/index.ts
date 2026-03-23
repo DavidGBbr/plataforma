@@ -9,9 +9,6 @@ let cachedHandler: ReturnType<typeof serverless> | null = null;
 
 async function bootstrapServer() {
   const expressApp = express();
-  expressApp.get("/", (_req, res) => {
-    res.send({ status: "ok", message: "Backend is running" });
-  });
   const adapter = new ExpressAdapter(expressApp);
   const app = await NestFactory.create(AppModule, adapter, { logger: false });
 
@@ -29,6 +26,12 @@ async function bootstrapServer() {
 }
 
 export default async function handler(req: any, res: any) {
+  if (req?.method === "GET" && (req?.url === "/" || req?.url === "")) {
+    res.statusCode = 200;
+    return res.end(
+      JSON.stringify({ status: "ok", message: "Backend is running" }),
+    );
+  }
   if (!cachedHandler) {
     cachedHandler = await bootstrapServer();
   }

@@ -5,7 +5,6 @@ import { AlunosModule } from "./alunos/alunos.module";
 import { TurmasModule } from "./turmas/turmas.module";
 import { DevelopersModule } from "./developers/developers.module";
 import { AdminModule } from "./admin/admin.module";
-import { HealthController } from "./health/health.controller";
 
 @Module({
   imports: [
@@ -39,6 +38,5 @@ import { HealthController } from "./health/health.controller";
     DevelopersModule,
     AdminModule,
   ],
-  controllers: [HealthController],
 })
 export class AppModule {}

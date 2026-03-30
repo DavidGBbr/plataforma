@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # ============================
+  # PostgreSQL Database
+  # ============================
+  db:
+    image: postgres:15-alpine
+    container_name: ibrc_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-ibrc_plataforma}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ibrc_db_data:/var/lib/postgresql/data
+      - ./IBRC-DB.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-ibrc_plataforma}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================
+  # NestJS Backend API
+  # ============================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ibrc_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-ibrc_plataforma}
+      JWT_SECRET: ${JWT_SECRET:-ibrc_secure_jwt_key_2026_super_secret}
+      PORT: 3000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=root_default"
+      - "traefik.http.routers.ibrc-backend.rule=Host(`irbc-backend.gestaoia.cloud`)"
+      - "traefik.http.routers.ibrc-backend.entrypoints=web,websecure"
+      - "traefik.http.routers.ibrc-backend.tls=true"
+      - "traefik.http.routers.ibrc-backend.tls.certresolver=mytlschallenge"
+      - "traefik.http.services.ibrc-backend.loadbalancer.server.port=3000"
+    networks:
+      - default
+      - root_default
+
+networks:
+  default:
+  root_default:
+    external: true
+
+volumes:
+  ibrc_db_data:

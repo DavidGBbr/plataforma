@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+*.log
+.vscode
+.git
+error.txt
+test-db.js
+deploy.sh

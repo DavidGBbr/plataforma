@@ -16,7 +16,6 @@ const MainLayout = () => {
         setIsRegistryOpen(true);
     };
 
-    // Helper to get title based on path (for Mobile Header)
     const getTitle = () => {
         switch (location.pathname) {
             case '/': return 'Lista de Presenças';
@@ -27,7 +26,7 @@ const MainLayout = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-background-light">
+        <div className="flex min-h-screen bg-surface">
             <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
@@ -37,14 +36,14 @@ const MainLayout = () => {
 
             <div className="flex-1 flex flex-col md:ml-72 transition-all duration-300 w-full">
                 {/* MOBILE HEADER */}
-                <header className="md:hidden bg-white p-4 border-b flex items-center gap-4 sticky top-0 z-20">
+                <header className="md:hidden bg-white/80 backdrop-blur-md p-4 border-b border-stone-200/60 flex items-center gap-4 sticky top-0 z-20">
                     <button
                         onClick={() => setSidebarOpen(true)}
-                        className="size-10 flex items-center justify-center rounded-lg border bg-gray-50 text-gray-600"
+                        className="size-10 flex items-center justify-center rounded-xl border border-stone-200 bg-white text-stone-500 hover:text-stone-700 hover:border-stone-300 transition"
                     >
-                        <span className="material-symbols-outlined text-2xl">menu</span>
+                        <span className="material-symbols-outlined text-xl">menu</span>
                     </button>
-                    <h2 className="text-xl font-black text-gray-800">{getTitle()}</h2>
+                    <h2 className="font-heading text-2xl font-bold text-stone-800">{getTitle()}</h2>
                 </header>
 
                 <main className="flex-1 p-0">

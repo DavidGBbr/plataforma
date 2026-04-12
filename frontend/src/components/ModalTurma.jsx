@@ -34,52 +34,55 @@ const ModalTurma = ({ isOpen, onClose, turmaInfo }) => {
 
     return (
         <>
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-                <div className="bg-white w-full max-w-xl rounded-2xl shadow-xl p-6 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in duration-200">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div className="bg-white w-full max-w-xl rounded-2xl border border-stone-200/60 shadow-xl p-6 space-y-5 max-h-[90vh] overflow-y-auto custom-scrollbar">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-xl font-black">{turmaInfo.turma}</h2>
-                        <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-                            <span className="material-symbols-outlined">close</span>
+                        <h2 className="font-heading text-xl font-bold text-stone-800">{turmaInfo.turma}</h2>
+                        <button onClick={onClose} className="size-8 flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition">
+                            <span className="material-symbols-outlined text-xl">close</span>
                         </button>
                     </div>
 
-                    <p className="text-sm text-gray-500">Professor: {turmaInfo.professor}</p>
+                    <p className="text-sm text-stone-400">Professor: <span className="text-stone-600 font-medium">{turmaInfo.professor}</span></p>
 
-                    <div className="flex justify-between items-center pt-2">
-                        <h3 className="font-bold text-gray-700">Alunos</h3>
+                    <div className="flex justify-between items-center">
+                        <h3 className="font-semibold text-stone-700 text-sm">Alunos ({alunos.length})</h3>
                         <button
                             onClick={handleNewAluno}
-                            className="flex items-center gap-1 text-primary font-bold hover:bg-primary/5 px-3 py-1 rounded-lg transition"
+                            className="flex items-center gap-1.5 text-primary font-semibold text-sm hover:text-primary-hover transition"
                         >
-                            <span className="material-symbols-outlined text-lg">add_circle</span>
-                            <span className="text-sm">Novo Aluno</span>
+                            <span className="material-symbols-outlined text-lg">add</span>
+                            Novo Aluno
                         </button>
                     </div>
 
-                    <ul className="space-y-2">
+                    <ul className="space-y-1.5">
                         {alunos.map((aluno, index) => (
-                            <li key={index} className="flex justify-between items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition">
-                                <span className="font-medium">{aluno}</span>
-                                <div className="flex gap-2">
+                            <li key={index} className="flex justify-between items-center px-4 py-3 border border-stone-100 rounded-xl hover:bg-surface-warm/50 transition group">
+                                <span className="font-medium text-sm text-stone-700">{aluno}</span>
+                                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
                                     <button
                                         onClick={() => handleEditAluno(aluno)}
-                                        className="p-1.5 text-gray-400 hover:text-primary hover:bg-white rounded-lg transition"
+                                        className="size-8 flex items-center justify-center text-stone-400 hover:text-primary hover:bg-primary-light rounded-lg transition"
                                         title="Editar"
                                     >
-                                        <span className="material-symbols-outlined text-sm">edit</span>
+                                        <span className="material-symbols-outlined text-base">edit</span>
                                     </button>
                                     <button
                                         onClick={() => handleDeleteAluno(aluno)}
-                                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-white rounded-lg transition"
+                                        className="size-8 flex items-center justify-center text-stone-400 hover:text-danger hover:bg-red-50 rounded-lg transition"
                                         title="Excluir"
                                     >
-                                        <span className="material-symbols-outlined text-sm">delete</span>
+                                        <span className="material-symbols-outlined text-base">delete</span>
                                     </button>
                                 </div>
                             </li>
                         ))}
                         {alunos.length === 0 && (
-                            <li className="text-center text-gray-400 text-sm py-4">Nenhum aluno cadastrado.</li>
+                            <li className="text-center text-stone-400 text-sm py-8">
+                                <span className="material-symbols-outlined text-3xl text-stone-300 block mb-2">person_off</span>
+                                Nenhum aluno cadastrado.
+                            </li>
                         )}
                     </ul>
                 </div>

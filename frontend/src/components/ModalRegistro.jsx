@@ -53,7 +53,6 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
         if (selectedTurma) {
             const alunos = getAlunosByTurma(selectedTurma);
             setAlunosList(alunos);
-
             const checks = {};
             alunos.forEach(a => (checks[a] = false));
             setCheckedAlunos(checks);
@@ -71,7 +70,6 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const presentesList = Object.keys(checkedAlunos).filter(k => checkedAlunos[k]);
 
         const registroData = {
@@ -108,31 +106,28 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
 
     if (!isOpen) return null;
 
+    const inputClass = "rounded-xl border border-stone-200 text-sm px-3 py-2.5 text-stone-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition bg-white";
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in duration-200">
+            <div className="bg-white w-full max-w-xl rounded-2xl border border-stone-200/60 shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
 
-                <div className="px-6 py-4 border-b flex justify-between items-center bg-gray-50/50">
-                    <h3 className="text-lg font-bold">
+                <div className="px-6 py-4 border-b border-stone-100 flex justify-between items-center">
+                    <h3 className="font-heading text-lg font-bold text-stone-800">
                         {registroToEdit ? 'Editar Registro' : 'Novo Registro de Chamada'}
                     </h3>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-                        ✕
+                    <button onClick={onClose} className="size-8 flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition">
+                        <span className="material-symbols-outlined text-xl">close</span>
                     </button>
                 </div>
 
                 <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
-                    <form id="formRegistro" className="space-y-6" onSubmit={handleSubmit}>
+                    <form id="formRegistro" className="space-y-5" onSubmit={handleSubmit}>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Turma</label>
-                                <select
-                                    required
-                                    value={turma}
-                                    onChange={handleTurmaChange}
-                                    className="rounded-xl border-gray-200 text-sm focus:ring-primary focus:border-primary"
-                                >
+                                <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider">Turma</label>
+                                <select required value={turma} onChange={handleTurmaChange} className={inputClass}>
                                     <option value="">Selecione...</option>
                                     {TURMAS_DISPONIVEIS.map(t => (
                                         <option key={t} value={t}>{t}</option>
@@ -141,39 +136,26 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Data</label>
-                                <input
-                                    type="date"
-                                    required
-                                    value={data}
-                                    onChange={e => setData(e.target.value)}
-                                    className="rounded-xl border-gray-200 text-sm focus:ring-primary focus:border-primary"
-                                />
+                                <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider">Data</label>
+                                <input type="date" required value={data} onChange={e => setData(e.target.value)} className={inputClass} />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-bold text-gray-400 uppercase">Professor Responsável</label>
-                            <input
-                                type="text"
-                                required
-                                value={professor}
-                                onChange={e => setProfessor(e.target.value)}
-                                placeholder="Nome do professor"
-                                className="rounded-xl border-gray-200 text-sm focus:ring-primary focus:border-primary"
-                            />
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider">Professor Responsável</label>
+                            <input type="text" required value={professor} onChange={e => setProfessor(e.target.value)} placeholder="Nome do professor" className={`w-full ${inputClass}`} />
                         </div>
 
                         {alunosList.length > 0 && (
-                            <div className="space-y-3">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Chamada de Alunos</label>
-                                <div className="grid grid-cols-1 gap-2 bg-gray-50 p-3 rounded-xl border border-dashed max-h-50 overflow-y-auto custom-scrollbar">
+                            <div className="space-y-2">
+                                <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider">Chamada de Alunos</label>
+                                <div className="grid grid-cols-1 gap-1 bg-surface-warm p-3 rounded-xl border border-stone-200/60 max-h-50 overflow-y-auto custom-scrollbar">
                                     {alunosList.map(aluno => (
-                                        <label key={aluno} className="flex justify-between items-center p-2 rounded hover:bg-gray-100 cursor-pointer">
-                                            <span>{aluno}</span>
+                                        <label key={aluno} className="flex justify-between items-center px-3 py-2 rounded-lg hover:bg-white cursor-pointer transition">
+                                            <span className="text-sm text-stone-700">{aluno}</span>
                                             <input
                                                 type="checkbox"
-                                                className="accent-primary w-4 h-4"
+                                                className="accent-primary w-4 h-4 rounded"
                                                 checked={!!checkedAlunos[aluno]}
                                                 onChange={() => handleMonitorChange(aluno)}
                                             />
@@ -183,13 +165,13 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
                             </div>
                         )}
 
-                        <div className="space-y-3">
-                            <label className="text-xs font-bold text-gray-400 uppercase">Visitantes</label>
+                        <div className="space-y-2">
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider">Visitantes</label>
                             <textarea
                                 rows="2"
                                 value={visitantes}
                                 onChange={e => setVisitantes(e.target.value)}
-                                className="w-full rounded-xl border-gray-200 text-sm focus:ring-primary focus:border-primary"
+                                className={`w-full ${inputClass}`}
                                 placeholder="Nomes dos visitantes (separados por vírgula)"
                             />
                         </div>
@@ -197,12 +179,12 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
                     </form>
                 </div>
 
-                <div className="px-6 py-4 bg-gray-50 border-t flex justify-between items-center">
+                <div className="px-6 py-4 bg-surface-warm/50 border-t border-stone-100 flex justify-between items-center">
                     {registroToEdit && (
                         <button
                             type="button"
                             onClick={() => setConfirmDelete(true)}
-                            className="text-red-600 font-bold hover:underline text-sm"
+                            className="text-danger font-semibold text-sm hover:text-danger-hover transition"
                         >
                             Excluir Registro
                         </button>
@@ -211,7 +193,7 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
                     <button
                         type="submit"
                         form="formRegistro"
-                        className="px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-bold shadow-lg hover:bg-primary/90 transition"
+                        className="ml-auto px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-hover active:scale-[0.98] transition-all duration-150 shadow-sm shadow-primary/20"
                     >
                         Salvar Registro
                     </button>
@@ -220,24 +202,22 @@ const ModalRegistro = ({ isOpen, onClose, registroToEdit }) => {
             </div>
 
             {confirmDelete && (
-                <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/70">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-xl space-y-4">
-                        <h4 className="text-lg font-bold text-red-600">Confirmar exclusão</h4>
-                        <p className="text-sm text-gray-600">
-                            Tem certeza que deseja excluir este registro?
-                            Essa ação não poderá ser desfeita.
+                <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-sm border border-stone-200/60 shadow-xl space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="size-10 rounded-xl bg-red-50 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-danger">warning</span>
+                            </div>
+                            <h4 className="font-heading text-lg font-bold text-danger">Confirmar exclusão</h4>
+                        </div>
+                        <p className="text-sm text-stone-500">
+                            Tem certeza que deseja excluir este registro? Essa ação não poderá ser desfeita.
                         </p>
                         <div className="flex justify-end gap-3">
-                            <button
-                                onClick={() => setConfirmDelete(false)}
-                                className="text-gray-500 font-bold"
-                            >
+                            <button onClick={() => setConfirmDelete(false)} className="px-4 py-2 text-sm font-semibold text-stone-500 hover:text-stone-700 transition">
                                 Cancelar
                             </button>
-                            <button
-                                onClick={handleDelete}
-                                className="px-4 py-2 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700"
-                            >
+                            <button onClick={handleDelete} className="px-5 py-2 rounded-xl bg-danger text-white text-sm font-semibold hover:bg-danger-hover transition">
                                 Excluir
                             </button>
                         </div>

@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 
 const ModalFotoPerfil = ({ isOpen, onClose }) => {
     const { user, updateUser } = useAuth();
-    const [tab, setTab] = useState('upload'); // 'upload' | 'url'
+    const [tab, setTab] = useState('upload');
     const [preview, setPreview] = useState('');
     const [urlInput, setUrlInput] = useState('');
     const [urlError, setUrlError] = useState('');
@@ -11,9 +11,8 @@ const ModalFotoPerfil = ({ isOpen, onClose }) => {
     const fileInputRef = useRef(null);
 
     const userName = user?.name || user?.username || 'Usuário';
-    const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=137fec&color=fff&bold=true`;
+    const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=B45309&color=fff&bold=true`;
 
-    // Reset state when modal opens
     useEffect(() => {
         if (isOpen) {
             setTab('upload');
@@ -86,24 +85,19 @@ const ModalFotoPerfil = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-            <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in duration-200">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-white w-full max-w-sm rounded-2xl border border-stone-200/60 shadow-xl overflow-hidden">
 
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4"
-                    style={{ background: 'linear-gradient(135deg, #0a2540 0%, #137fec 100%)' }}>
+                <div className="flex items-center justify-between px-5 py-4 bg-sidebar-dark">
                     <div className="flex items-center gap-3">
-                        <div className="size-8 rounded-lg bg-white/10 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-white text-lg">add_a_photo</span>
+                        <div className="size-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-primary text-lg">add_a_photo</span>
                         </div>
-                        <h2 className="text-white font-bold text-base">Foto de Perfil</h2>
+                        <h2 className="text-white font-semibold text-sm">Foto de Perfil</h2>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="text-white/60 hover:text-white transition"
-                        title="Fechar"
-                    >
-                        <span className="material-symbols-outlined">close</span>
+                    <button onClick={onClose} className="text-stone-500 hover:text-stone-300 transition">
+                        <span className="material-symbols-outlined text-xl">close</span>
                     </button>
                 </div>
 
@@ -113,39 +107,34 @@ const ModalFotoPerfil = ({ isOpen, onClose }) => {
                     <div className="flex flex-col items-center gap-2">
                         <div className="relative group">
                             <div
-                                className="size-24 rounded-full bg-cover bg-center border-4 shadow-lg transition-transform group-hover:scale-105"
-                                style={{
-                                    backgroundImage: `url('${preview || fallbackAvatar}')`,
-                                    borderColor: '#137fec33'
-                                }}
+                                className="size-24 rounded-2xl bg-cover bg-center ring-2 ring-stone-200 transition-transform group-hover:scale-105"
+                                style={{ backgroundImage: `url('${preview || fallbackAvatar}')` }}
                             />
-                            <div className="absolute inset-0 rounded-full flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute inset-0 rounded-2xl flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="material-symbols-outlined text-white text-2xl">photo_camera</span>
                             </div>
                         </div>
-                        <p className="text-xs text-gray-400">Pré-visualização</p>
+                        <p className="text-xs text-stone-400">Pré-visualização</p>
                     </div>
 
                     {/* Tabs */}
-                    <div className="flex rounded-xl bg-gray-100 p-1 gap-1">
+                    <div className="flex rounded-xl bg-stone-100 p-1 gap-1">
                         <button
                             onClick={() => { setTab('upload'); setUrlError(''); }}
-                            className="flex-1 text-xs font-bold py-2 rounded-lg transition-all"
-                            style={tab === 'upload'
-                                ? { background: '#fff', color: '#137fec', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }
-                                : { color: '#6b7280' }
-                            }
+                            className={`flex-1 text-xs font-semibold py-2.5 rounded-lg transition-all ${tab === 'upload'
+                                ? 'bg-white text-stone-800 shadow-sm'
+                                : 'text-stone-500 hover:text-stone-700'
+                                }`}
                         >
                             <span className="material-symbols-outlined text-sm align-middle mr-1">upload</span>
                             Upload
                         </button>
                         <button
                             onClick={() => { setTab('url'); setUrlError(''); }}
-                            className="flex-1 text-xs font-bold py-2 rounded-lg transition-all"
-                            style={tab === 'url'
-                                ? { background: '#fff', color: '#137fec', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }
-                                : { color: '#6b7280' }
-                            }
+                            className={`flex-1 text-xs font-semibold py-2.5 rounded-lg transition-all ${tab === 'url'
+                                ? 'bg-white text-stone-800 shadow-sm'
+                                : 'text-stone-500 hover:text-stone-700'
+                                }`}
                         >
                             <span className="material-symbols-outlined text-sm align-middle mr-1">link</span>
                             URL
@@ -156,20 +145,11 @@ const ModalFotoPerfil = ({ isOpen, onClose }) => {
                     {tab === 'upload' ? (
                         <div
                             onClick={() => fileInputRef.current?.click()}
-                            className="border-2 border-dashed rounded-xl p-6 flex flex-col items-center gap-2 cursor-pointer transition-all"
-                            style={{ borderColor: '#137fec55' }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.borderColor = '#137fec';
-                                e.currentTarget.style.background = '#137fec0a';
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.borderColor = '#137fec55';
-                                e.currentTarget.style.background = '';
-                            }}
+                            className="border-2 border-dashed border-stone-200 rounded-xl p-6 flex flex-col items-center gap-2 cursor-pointer transition-all hover:border-primary/50 hover:bg-primary-light/30"
                         >
-                            <span className="material-symbols-outlined text-4xl" style={{ color: '#137fec80' }}>image</span>
-                            <p className="text-xs font-bold text-gray-500">Clique para selecionar</p>
-                            <p className="text-[10px] text-gray-400">PNG, JPG, WEBP — máx. 2MB</p>
+                            <span className="material-symbols-outlined text-4xl text-stone-300">image</span>
+                            <p className="text-xs font-semibold text-stone-500">Clique para selecionar</p>
+                            <p className="text-[10px] text-stone-400">PNG, JPG, WEBP — máx. 2MB</p>
                             <input
                                 ref={fileInputRef}
                                 type="file"
@@ -180,45 +160,35 @@ const ModalFotoPerfil = ({ isOpen, onClose }) => {
                         </div>
                     ) : (
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-400 uppercase">URL da imagem</label>
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider">URL da imagem</label>
                             <input
                                 type="url"
                                 value={urlInput}
                                 onChange={handleUrlChange}
                                 placeholder="https://exemplo.com/foto.jpg"
-                                className="w-full rounded-xl border border-gray-200 text-sm px-3 py-2 focus:outline-none"
-                                style={{ '--tw-ring-color': '#137fec' }}
-                                onFocus={e => e.target.style.borderColor = '#137fec'}
-                                onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                                className="w-full rounded-xl border border-stone-200 text-sm px-3 py-2.5 text-stone-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition"
                             />
-                            {/* Hidden img to validate URL */}
                             {urlInput.trim() && (
-                                <img
-                                    src={urlInput.trim()}
-                                    alt=""
-                                    className="hidden"
-                                    onError={handleUrlError}
-                                    onLoad={() => setUrlError('')}
-                                />
+                                <img src={urlInput.trim()} alt="" className="hidden" onError={handleUrlError} onLoad={() => setUrlError('')} />
                             )}
                         </div>
                     )}
 
                     {/* Error */}
                     {urlError && (
-                        <p className="text-xs text-red-500 flex items-center gap-1">
+                        <div className="flex items-center gap-2 text-xs text-danger bg-red-50 border border-red-200/60 rounded-lg px-3 py-2">
                             <span className="material-symbols-outlined text-sm">error</span>
                             {urlError}
-                        </p>
+                        </div>
                     )}
 
                     {/* Actions */}
-                    <div className="flex gap-2 pt-1 border-t border-gray-100">
+                    <div className="flex gap-2 pt-2 border-t border-stone-100">
                         {user?.avatar && (
                             <button
                                 onClick={handleRemove}
                                 disabled={saving}
-                                className="px-3 py-2 text-xs font-bold text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition flex items-center gap-1"
+                                className="px-3 py-2 text-xs font-semibold text-danger hover:bg-red-50 rounded-lg transition flex items-center gap-1"
                             >
                                 <span className="material-symbols-outlined text-sm">delete</span>
                                 Remover
@@ -228,15 +198,14 @@ const ModalFotoPerfil = ({ isOpen, onClose }) => {
                         <button
                             onClick={onClose}
                             disabled={saving}
-                            className="px-4 py-2 text-xs font-bold text-gray-500 hover:text-gray-700 transition"
+                            className="px-4 py-2 text-xs font-semibold text-stone-500 hover:text-stone-700 transition"
                         >
                             Cancelar
                         </button>
                         <button
                             onClick={handleSave}
                             disabled={saving || !preview}
-                            className="px-5 py-2 rounded-xl text-white text-xs font-bold shadow transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                            style={{ background: 'linear-gradient(135deg, #0a2540 0%, #137fec 100%)' }}
+                            className="px-5 py-2 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-hover transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-primary/20"
                         >
                             {saving
                                 ? <><span className="material-symbols-outlined text-sm animate-spin">progress_activity</span> Salvando...</>

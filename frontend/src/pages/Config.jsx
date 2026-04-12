@@ -8,7 +8,6 @@ const Config = () => {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
 
-
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
 
@@ -38,65 +37,60 @@ const Config = () => {
         alert('Perfil atualizado!');
     };
 
-
     const handleUpdatePassword = () => {
         if (!senha || senha.length < 6) {
             alert('Senha mínima de 6 caracteres');
             return;
         }
-
         if (senha !== confirmarSenha) {
             alert('As senhas não coincidem');
             return;
         }
-
         alert('Senha atualizada (simulação)');
         setSenha('');
         setConfirmarSenha('');
     };
 
-    // 🔥 EXCLUSÃO + LOGOUT DIRETO (SEM CONFIRMAÇÃO DE SAÍDA)
     const confirmDeleteAccount = () => {
         setShowDeleteModal(false);
-
-        sessionStorage.clear(); // limpa dados
-        logout();             // logout direto, sem perguntar nada
+        sessionStorage.clear();
+        logout();
     };
+
+    const inputClass = "w-full px-4 py-3 border border-stone-200 rounded-xl text-sm text-stone-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition bg-white";
 
     return (
         <div className="p-4 md:p-8">
-            <header className="hidden md:flex bg-white border-b -mx-8 -mt-8 px-8 h-20 items-center mb-8">
-                <h2 className="text-3xl font-black">Configurações</h2>
+            <header className="hidden md:flex bg-white border-b border-stone-200/60 -mx-8 -mt-8 px-8 h-20 items-center mb-8">
+                <h2 className="font-heading text-3xl font-bold text-stone-800">Configurações</h2>
             </header>
 
-            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow p-6 space-y-10">
+            <div className="max-w-3xl mx-auto space-y-6">
 
                 {/* PERFIL */}
-                <section>
-                    <h2 className="text-xl font-bold mb-4">Perfil</h2>
+                <section className="bg-white rounded-2xl border border-stone-200/60 p-6 shadow-sm shadow-stone-200/50">
+                    <h2 className="font-heading text-xl font-bold text-stone-800 mb-5">Perfil</h2>
 
-                    <div className="flex items-center gap-6">
-                        {/* Avatar clicável */}
+                    <div className="flex items-center gap-5">
                         <button
                             onClick={() => setShowAvatarModal(true)}
                             className="relative group focus:outline-none"
                             title="Alterar foto de perfil"
                         >
                             <div
-                                className="size-24 rounded-full bg-gray-200 bg-cover bg-center border-4 border-gray-100 shadow transition-transform group-hover:scale-105"
-                                style={{ backgroundImage: `url('${user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Usuário')}&background=6C63FF&color=fff&bold=true`}')` }}
+                                className="size-20 rounded-2xl bg-stone-100 bg-cover bg-center ring-2 ring-stone-200 transition-transform group-hover:scale-105"
+                                style={{ backgroundImage: `url('${user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Usuário')}&background=B45309&color=fff&bold=true`}')` }}
                             />
-                            {/* Overlay câmera */}
-                            <div className="absolute inset-0 rounded-full flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span className="material-symbols-outlined text-white text-3xl">photo_camera</span>
+                            <div className="absolute inset-0 rounded-2xl flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span className="material-symbols-outlined text-white text-2xl">photo_camera</span>
                             </div>
                         </button>
 
                         <div>
-                            <p className="font-bold text-gray-800">{user?.name || 'Usuário'}</p>
+                            <p className="font-semibold text-stone-800">{user?.name || 'Usuário'}</p>
                             <button
                                 onClick={() => setShowAvatarModal(true)}
-                                className="text-primary text-sm font-bold hover:underline mt-1"
+                                className="text-primary text-sm font-medium hover:text-primary-hover mt-0.5 transition"
                             >
                                 Alterar foto
                             </button>
@@ -105,76 +99,56 @@ const Config = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <div>
-                            <label className="font-semibold block mb-1">Nome</label>
-                            <input
-                                type="text"
-                                value={nome}
-                                onChange={(e) => setNome(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded-xl"
-                            />
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider block mb-2">Nome</label>
+                            <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} className={inputClass} />
                         </div>
-
                         <div>
-                            <label className="font-semibold block mb-1">Email</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded-xl"
-                            />
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider block mb-2">Email</label>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
                         </div>
                     </div>
 
                     <button
                         onClick={handleUpdateProfile}
-                        className="mt-4 bg-primary text-white px-6 py-2 rounded-xl font-bold"
+                        className="mt-5 bg-primary text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary-hover active:scale-[0.98] transition-all duration-150 shadow-sm shadow-primary/20"
                     >
                         Salvar alterações
                     </button>
                 </section>
 
-
                 {/* SEGURANÇA */}
-                <section>
-                    <h2 className="text-xl font-bold mb-4">Segurança</h2>
+                <section className="bg-white rounded-2xl border border-stone-200/60 p-6 shadow-sm shadow-stone-200/50">
+                    <h2 className="font-heading text-xl font-bold text-stone-800 mb-5">Segurança</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input
-                            type="password"
-                            placeholder="Nova senha"
-                            value={senha}
-                            onChange={e => setSenha(e.target.value)}
-                            className="p-2 border border-gray-300 rounded-xl"
-                        />
-
-                        <input
-                            type="password"
-                            placeholder="Confirmar senha"
-                            value={confirmarSenha}
-                            onChange={e => setConfirmarSenha(e.target.value)}
-                            className="p-2 border border-gray-300 rounded-xl"
-                        />
+                        <div>
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider block mb-2">Nova senha</label>
+                            <input type="password" placeholder="Mínimo 6 caracteres" value={senha} onChange={e => setSenha(e.target.value)} className={inputClass} />
+                        </div>
+                        <div>
+                            <label className="text-xs font-semibold text-stone-400 uppercase tracking-wider block mb-2">Confirmar senha</label>
+                            <input type="password" placeholder="Repita a senha" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)} className={inputClass} />
+                        </div>
                     </div>
 
                     <button
                         onClick={handleUpdatePassword}
-                        className="mt-4 bg-primary text-white px-6 py-2 rounded-xl font-bold"
+                        className="mt-5 bg-primary text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary-hover active:scale-[0.98] transition-all duration-150 shadow-sm shadow-primary/20"
                     >
                         Atualizar senha
                     </button>
                 </section>
 
                 {/* ZONA DE PERIGO */}
-                <section className="border-t pt-6">
-                    <h2 className="text-xl font-bold text-red-600 mb-4">
-                        Excluir conta
-                    </h2>
+                <section className="bg-white rounded-2xl border border-red-200/60 p-6">
+                    <h2 className="font-heading text-xl font-bold text-danger mb-2">Zona de perigo</h2>
+                    <p className="text-sm text-stone-400 mb-4">Esta ação é irreversível. Todos os seus dados serão removidos permanentemente.</p>
 
                     <button
                         onClick={() => setShowDeleteModal(true)}
-                        className="w-full bg-red-600 text-white py-2 rounded-xl font-bold hover:bg-red-700"
+                        className="w-full border-2 border-dashed border-red-200 text-danger py-3 rounded-xl font-semibold text-sm hover:bg-red-50 hover:border-red-300 transition"
                     >
-                        Excluir conta
+                        Excluir minha conta
                     </button>
                 </section>
             </div>
@@ -187,28 +161,30 @@ const Config = () => {
 
             {/* MODAL DE CONFIRMAÇÃO EXCLUSÃO */}
             {showDeleteModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-                        <h3 className="text-xl font-black text-red-600 mb-3">
-                            Excluir conta
-                        </h3>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-md border border-stone-200/60 shadow-xl">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="size-10 rounded-xl bg-red-50 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-danger">warning</span>
+                            </div>
+                            <h3 className="font-heading text-xl font-bold text-danger">Excluir conta</h3>
+                        </div>
 
-                        <p className="text-gray-600 mb-6">
-                            Essa ação é <strong>permanente</strong>.
-                            Todos os seus dados serão removidos.
+                        <p className="text-stone-500 text-sm mb-6">
+                            Essa ação é <strong className="text-stone-700">permanente</strong>.
+                            Todos os seus dados serão removidos e não poderão ser recuperados.
                         </p>
 
-                        <div className="flex gap-4">
+                        <div className="flex gap-3">
                             <button
                                 onClick={() => setShowDeleteModal(false)}
-                                className="flex-1 border border-gray-300 py-2 rounded-xl font-bold"
+                                className="flex-1 border border-stone-200 py-2.5 rounded-xl font-semibold text-sm text-stone-600 hover:bg-stone-50 transition"
                             >
                                 Cancelar
                             </button>
-
                             <button
                                 onClick={confirmDeleteAccount}
-                                className="flex-1 bg-red-600 text-white py-2 rounded-xl font-bold hover:bg-red-700"
+                                className="flex-1 bg-danger text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-danger-hover transition"
                             >
                                 Sim, excluir
                             </button>
